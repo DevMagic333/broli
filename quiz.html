@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How much do you hate broccoli?</title>
+<meta property="og:title" content="How much do you hate broccoli?">
+<meta property="og:description" content="Seven questions. One power level. No mercy.">
+<meta property="og:image" content="broli.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter+Tight:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#EDF3E5;--tray:#fff;--stem:#16321B;--floret:#4E9A3A;--sticker:#FF3B1F;--line:#16321B}
+body.max{--paper:#050D07;--tray:#0C1A0E;--stem:#E9FFD8;--floret:#A8FF3E;--sticker:#FFE24A;--line:#2C5B2E}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--stem);font-family:'Inter Tight',system-ui,sans-serif;
+  line-height:1.45;transition:background .7s,color .7s;min-height:100vh}
+.wrap{max-width:620px;margin:0 auto;padding:26px 18px 70px}
+.mono{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--floret)}
+h1{font-family:'Anton',sans-serif;font-size:clamp(30px,9vw,50px);text-transform:uppercase;
+  line-height:.92;margin:8px 0 6px}
+.lead{font-size:16px;opacity:.8;margin-bottom:24px}
+.bar{height:6px;background:var(--tray);border:2px solid var(--line);margin-bottom:26px}
+.bar i{display:block;height:100%;width:0;background:var(--floret);transition:width .3s}
+.q{font-family:'Anton',sans-serif;font-size:clamp(21px,5.5vw,30px);text-transform:uppercase;
+  line-height:1.02;margin-bottom:18px}
+.opt{display:block;width:100%;text-align:left;background:var(--tray);border:2px solid var(--line);
+  padding:15px 17px;margin-bottom:9px;cursor:pointer;font-family:'Inter Tight',sans-serif;
+  font-size:15.5px;color:var(--stem);line-height:1.3}
+.opt:hover{background:var(--floret);color:#fff}
+.opt:focus-visible{outline:3px solid var(--sticker);outline-offset:2px}
+#result{display:none;text-align:center}
+.score{font-family:'Space Mono',monospace;font-weight:700;font-size:clamp(44px,14vw,84px);line-height:1;margin:10px 0}
+.tier{font-family:'Anton',sans-serif;font-size:clamp(26px,7vw,42px);text-transform:uppercase;color:var(--sticker);line-height:1}
+.verdict{font-size:16.5px;margin:18px auto 26px;max-width:34ch}
+.acts{display:flex;gap:9px;flex-wrap:wrap;justify-content:center}
+.acts a,.acts button{border:2px solid var(--line);background:var(--tray);color:var(--stem);
+  padding:13px 20px;text-decoration:none;cursor:pointer;font-family:'Space Mono',monospace;
+  font-size:11px;letter-spacing:.11em;text-transform:uppercase}
+.acts .go{background:var(--sticker);color:#fff;border-color:var(--sticker)}
+body.max .acts .go{color:#14260E}
+.back{margin-top:34px;font-size:13px;opacity:.6}
+.back a{color:inherit}
+</style>
+</head>
+<body><div class="wrap">
+
+<span class="mono" id="lang-line">Un cuestionario serio · A serious assessment</span>
+<h1>How much do<br>you hate broccoli?</h1>
+<p class="lead">Seven questions. One power level. Answer honestly — he can tell.</p>
+
+<div class="bar"><i id="bar"></i></div>
+
+<div id="quiz"></div>
+
+<div id="result">
+  <span class="mono">Your power level</span>
+  <div class="score" id="score">0</div>
+  <div class="tier" id="tier"></div>
+  <p class="verdict" id="verdict"></p>
+  <div class="acts">
+    <a class="go" id="share" target="_blank" rel="noopener">Post my score</a>
+    <button id="retry">Try again</button>
+    <a id="tg" href="#" target="_blank" rel="noopener">Join the group</a>
+  </div>
+  <p class="back"><a href="index.html">← Back to $BROLI</a></p>
+</div>
+
+</div>
+<script>
+/* ═══════════ CONFIG — EDIT THIS ═══════════ */
+const CONFIG = {
+  handle: "@brolitoken",              // your X handle, used in the share text
+  telegram: "https://t.me/",          // your group
+  site: "https://broli.fun"           // your domain, appended to shares
+};
+/* ═════════════════════════════════════════ */
+
+const Q = [
+  ["Broccoli appears on your plate. You:", [
+    ["Eat it first to get it over with", 400],
+    ["Push it to the edge and negotiate", 900],
+    ["Hide it under the napkin like a coward", 1200],
+    ["Stand up. Leave. Move states.", 1500]
+  ]],
+  ["Cheese sauce is:", [
+    ["A nice complement", 200],
+    ["Doing most of the work", 800],
+    ["Doing all of the work", 1200],
+    ["The only reason broccoli still exists", 1500]
+  ]],
+  ["Last time you finished an entire serving:", [
+    ["This week. I like it.", 100],
+    ["Some point this year", 700],
+    ["Childhood. Under duress.", 1300],
+    ["Never. Not once. Nobody has.", 1500]
+  ]],
+  ["Someone hands you a raw floret:", [
+    ["Thanks, I'll snack on it", 100],
+    ["Hold it politely, discard later", 800],
+    ["Return it like a package", 1300],
+    ["Crush it. Immediately. Reflexively.", 1500]
+  ]],
+  ["In Spanish it's brócoli. This is:", [
+    ["Kind of pretty actually", 300],
+    ["Worse somehow", 900],
+    ["Proof it's bad in every language", 1400],
+    ["Suena a castigo", 1500]
+  ]],
+  ["The bag in your fridge is from:", [
+    ["I don't buy it", 900],
+    ["Last week, still good", 300],
+    ["A month ago, situation developing", 1200],
+    ["2019. Nobody opens that drawer.", 1500]
+  ]],
+  ["A kid refuses to eat their broccoli. You:", [
+    ["Explain that vegetables are important", 200],
+    ["Say nothing, respect the position", 1000],
+    ["Quietly eat it for them, then regret it", 800],
+    ["Salute. A soldier knows a soldier.", 1500]
+  ]]
+];
+
+const TIERS = [
+  [1500, "Traitor", "You like it. You actually like it. There is nothing here for you. Leave."],
+  [3500, "Civilian", "You tolerate broccoli. That's worse than hating it. Pick a side."],
+  [6000, "Hater", "Respectable. You've suffered. You remember. Keep going."],
+  [8500, "Crusher", "Serious hatred. The kind that gets passed down through families."],
+  [9000, "Full Power", "You have been carrying this since childhood and it shows."],
+  [99999, "Legendary", "A perfect score. Nobody hates broccoli this much. You are the myth."]
+];
+
+let i = 0, total = 0;
+const el = id => document.getElementById(id);
+el("tg").href = CONFIG.telegram;
+
+function render(){
+  if (i >= Q.length) return finish();
+  el("bar").style.width = (i / Q.length * 100) + "%";
+  const [q, opts] = Q[i];
+  el("quiz").innerHTML = `<div class="q">${q}</div>` +
+    opts.map((o, j) => `<button class="opt" data-v="${o[1]}">${o[0]}</button>`).join("");
+}
+el("quiz").addEventListener("click", e => {
+  const b = e.target.closest(".opt"); if (!b) return;
+  total += +b.dataset.v; i++; render();
+});
+
+function finish(){
+  el("bar").style.width = "100%";
+  el("quiz").style.display = "none";
+  el("result").style.display = "block";
+  const max = Q.reduce((s,[,o]) => s + Math.max(...o.map(x=>x[1])), 0);
+  const score = total === max ? 9001 : Math.round(total / max * 9000);
+  const t = TIERS.find(t => score <= t[0]);
+  if (score >= 8500) document.body.classList.add("max");
+
+  let n = 0;
+  const step = Math.max(1, Math.round(score / 45));
+  const anim = setInterval(() => {
+    n = Math.min(score, n + step);
+    el("score").textContent = score === 9001 && n === score ? "OVER 9000" : n.toLocaleString();
+    if (n >= score) clearInterval(anim);
+  }, 22);
+
+  el("tier").textContent = t[1];
+  el("verdict").textContent = t[2];
+  el("share").href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(
+    `My broccoli hatred registers at ${score === 9001 ? "OVER 9000" : score.toLocaleString()}.\n\n` +
+    `${t[1]}.\n\nFind out yours ${CONFIG.handle}`) + "&url=" + encodeURIComponent(CONFIG.site + "/quiz.html");
+}
+
+el("retry").onclick = () => {
+  i = 0; total = 0;
+  document.body.classList.remove("max");
+  el("result").style.display = "none";
+  el("quiz").style.display = "block";
+  render();
+};
+render();
+</script>
+</body></html>

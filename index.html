@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BROCCOLI — $BROLI</title>
+<meta name="description" content="A vegetable nobody asked for. Now on Solana.">
+
+<!-- ═══════════════════════════════════════════════════════════
+     EDIT THESE THREE THINGS AND YOU'RE DONE
+     1. Put your image in the same folder, named  broli.png
+     2. Fill in CONFIG below (contract address + links)
+     3. Upload to GitHub → Vercel does the rest
+     ═══════════════════════════════════════════════════════ -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter+Tight:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --paper:#EDF3E5;      /* fluorescent produce-aisle light */
+  --tray:#FFFFFF;       /* styrofoam */
+  --stem:#16321B;       /* deep stem green — text */
+  --floret:#4E9A3A;     /* waxy green */
+  --high:#8FD14F;       /* highlight green */
+  --sticker:#FF3B1F;    /* price tag red */
+  --line:#16321B;
+  --aura:transparent;
+  --shake:0px;
+  --flicker:1;
+}
+body.legendary{
+  --paper:#050D07;
+  --tray:#0C1A0E;
+  --stem:#E9FFD8;
+  --floret:#A8FF3E;
+  --high:#DDFF8C;
+  --sticker:#FFE24A;
+  --line:#2C5B2E;
+  --aura:#A8FF3E;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper);
+  color:var(--stem);
+  font-family:'Inter Tight',system-ui,sans-serif;
+  line-height:1.45;
+  overflow-x:hidden;
+  transition:background .8s ease,color .8s ease;
+  transform:translate(var(--shake),0);
+}
+.wrap{max-width:940px;margin:0 auto;padding:0 20px}
+
+/* ── shared bits ───────────────────────────────── */
+.eyebrow{
+  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--floret);
+}
+.rule{height:2px;background:var(--line);opacity:.85;margin:0}
+h2{
+  font-family:'Anton',sans-serif;font-weight:400;
+  font-size:clamp(30px,7vw,52px);line-height:.94;
+  text-transform:uppercase;letter-spacing:-.01em;margin:10px 0 22px;
+}
+p{font-size:16px}
+section{padding:56px 0}
+
+/* ── fluorescent ceiling ───────────────────────── */
+.tubes{position:fixed;inset:0 0 auto 0;height:120px;pointer-events:none;z-index:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.85),transparent);
+  opacity:var(--flicker);transition:opacity .05s}
+body.legendary .tubes{background:linear-gradient(180deg,rgba(168,255,62,.16),transparent)}
+
+/* ── HERO ──────────────────────────────────────── */
+header{position:relative;z-index:1;padding-top:34px}
+.tagstrip{
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;border-bottom:2px solid var(--line);padding-bottom:10px;
+}
+.hero{display:grid;grid-template-columns:1fr 300px;gap:34px;align-items:end;padding:38px 0 28px}
+h1{
+  font-family:'Anton',sans-serif;font-weight:400;
+  font-size:clamp(64px,17vw,150px);line-height:.82;text-transform:uppercase;
+  letter-spacing:-.02em;
+}
+h1 .lg{display:block;font-size:.42em;color:var(--sticker);letter-spacing:0;
+  opacity:0;max-height:0;overflow:hidden;transition:opacity .5s,max-height .5s}
+body.legendary h1 .lg{opacity:1;max-height:90px}
+.sub{font-size:19px;font-weight:600;margin-top:16px;max-width:34ch}
+.sub em{font-style:italic;color:var(--floret)}
+
+/* product photo in a styrofoam tray */
+.tray{
+  background:var(--tray);border:2px solid var(--line);padding:10px 10px 44px;
+  position:relative;box-shadow:6px 6px 0 var(--line);
+}
+.tray .photo{position:relative;aspect-ratio:1;overflow:hidden;background:var(--high)}
+.tray img,.tray video{width:100%;height:100%;object-fit:cover;display:block;position:relative;z-index:2;background:var(--high)}
+.noimg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  text-align:center;font-family:'Space Mono',monospace;font-size:12px;padding:20px;color:var(--stem)}
+.glow{position:absolute;inset:-30%;z-index:1;border-radius:50%;
+  background:radial-gradient(circle,var(--aura),transparent 62%);
+  opacity:0;transition:opacity .8s}
+body.legendary .glow{opacity:.9;animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.12)}}
+.plu{
+  position:absolute;right:-14px;top:-14px;width:78px;height:78px;border-radius:50%;
+  background:var(--sticker);color:#fff;display:grid;place-content:center;text-align:center;
+  font-family:'Space Mono',monospace;font-weight:700;font-size:11px;line-height:1.25;
+  border:2px solid var(--line);transform:rotate(-9deg);z-index:3;
+}
+body.legendary .plu{color:#14260E}
+.trayfoot{
+  position:absolute;left:10px;right:10px;bottom:10px;
+  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;display:flex;justify-content:space-between;
+}
+
+/* ── RAGE SCALE (the signature) ────────────────── */
+.scale{border:2px solid var(--line);background:var(--tray);margin-top:8px}
+.scale-top{display:flex;justify-content:space-between;align-items:baseline;
+  padding:14px 16px 10px;border-bottom:2px solid var(--line)}
+.readout{font-family:'Space Mono',monospace;font-weight:700;font-size:clamp(26px,6vw,40px)}
+.bar{height:26px;background:repeating-linear-gradient(90deg,transparent 0 15px,var(--line) 15px 16px);
+  position:relative;border-bottom:2px solid var(--line)}
+.fill{position:absolute;inset:0 auto 0 0;width:0;background:var(--floret);
+  transition:width .18s cubic-bezier(.2,.9,.3,1);mix-blend-mode:multiply}
+body.legendary .fill{mix-blend-mode:normal;background:var(--high)}
+.smash{
+  width:100%;padding:20px;border:0;background:var(--sticker);color:#fff;cursor:pointer;
+  font-family:'Anton',sans-serif;font-size:clamp(20px,5vw,28px);text-transform:uppercase;
+  letter-spacing:.04em;transition:filter .1s;
+}
+body.legendary .smash{color:#14260E}
+.smash:hover{filter:brightness(1.1)}
+.smash:active{transform:translateY(2px)}
+.smash:focus-visible,a:focus-visible,button:focus-visible{outline:3px solid var(--floret);outline-offset:3px}
+
+/* ── CONTRACT BARCODE ──────────────────────────── */
+.barcode{
+  display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;
+  border:2px solid var(--line);background:var(--tray);padding:16px;margin-top:34px;
+}
+.ca{font-family:'Space Mono',monospace;font-size:13px;word-break:break-all;flex:1 1 240px}
+.copy{background:var(--stem);color:var(--paper);border:0;padding:12px 22px;cursor:pointer;
+  font-family:'Space Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.12em;
+  text-transform:uppercase}
+
+/* ── NUTRITION PANEL ───────────────────────────── */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start}
+.label{background:var(--tray);border:3px solid var(--line);padding:14px 16px;
+  font-family:'Inter Tight',sans-serif}
+.label h3{font-family:'Anton',sans-serif;font-size:34px;text-transform:uppercase;line-height:.9}
+.label .thick{height:9px;background:var(--line);margin:6px 0}
+.label .thin{height:2px;background:var(--line);margin:4px 0}
+.row{display:flex;justify-content:space-between;font-size:14px;padding:3px 0}
+.row b{font-weight:800}
+.row.indent{padding-left:16px}
+.fine{font-size:11px;line-height:1.35;margin-top:8px}
+
+/* ── RECEIPT ───────────────────────────────────── */
+.receipt{background:var(--tray);border:2px solid var(--line);padding:22px 20px 26px;
+  font-family:'Space Mono',monospace;font-size:13px;position:relative}
+.receipt:after{content:"";position:absolute;left:0;right:0;bottom:-11px;height:12px;
+  background:repeating-linear-gradient(135deg,var(--tray) 0 9px,transparent 9px 18px);
+  border-left:2px solid var(--line);border-right:2px solid var(--line)}
+.receipt .head{text-align:center;letter-spacing:.2em;font-weight:700;margin-bottom:14px}
+#quote{min-height:70px;display:flex;align-items:center;font-size:15px}
+.again{margin-top:16px;background:none;border:2px solid var(--line);color:var(--stem);
+  padding:10px 16px;cursor:pointer;font-family:'Space Mono',monospace;font-size:11px;
+  letter-spacing:.12em;text-transform:uppercase;width:100%}
+
+/* ── HARVEST (roadmap) ─────────────────────────── */
+.stages{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--line);
+  border:2px solid var(--line)}
+.stage{background:var(--tray);padding:20px 16px 24px;min-height:180px}
+.stage .n{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.16em;color:var(--floret)}
+.stage h4{font-family:'Anton',sans-serif;font-size:21px;text-transform:uppercase;
+  margin:10px 0 8px;line-height:1}
+.stage p{font-size:13px}
+.stage:last-child{background:var(--floret);color:var(--tray)}
+body.legendary .stage:last-child{color:#14260E}
+
+/* ── CHECKOUT ──────────────────────────────────── */
+.lane{border-top:2px solid var(--line)}
+.lane li{list-style:none;display:flex;gap:18px;padding:18px 0;border-bottom:2px solid var(--line);
+  align-items:baseline}
+.lane .k{font-family:'Space Mono',monospace;font-size:12px;color:var(--floret);flex:0 0 44px}
+.lane h5{font-size:17px;font-weight:800}
+.lane p{font-size:14px;opacity:.8}
+
+/* ── complaint wall ── */
+.wall{columns:2;column-gap:12px;margin-top:20px}
+.wall .card{break-inside:avoid;background:var(--tray);border:2px solid var(--line);
+  padding:14px 16px;margin-bottom:12px}
+.wall .card p{font-size:15px}
+.wall .card .who{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.1em;
+  color:var(--floret);margin-top:9px}
+@media(max-width:700px){.wall{columns:1}}
+#lang{background:var(--stem);color:var(--paper);border:0;padding:5px 11px;cursor:pointer;
+  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;font-weight:700}
+
+.cta{display:inline-block;margin-top:30px;background:var(--sticker);color:#fff;
+  font-family:'Anton',sans-serif;font-size:26px;text-transform:uppercase;letter-spacing:.03em;
+  padding:20px 42px;text-decoration:none;box-shadow:6px 6px 0 var(--line)}
+body.legendary .cta{color:#14260E}
+.cta:active{transform:translate(3px,3px);box-shadow:3px 3px 0 var(--line)}
+
+footer{border-top:2px solid var(--line);padding:26px 0 60px;font-family:'Space Mono',monospace;
+  font-size:11px;letter-spacing:.1em;text-transform:uppercase;display:flex;
+  justify-content:space-between;flex-wrap:wrap;gap:12px}
+footer a{color:inherit}
+
+@media(max-width:760px){
+  .hero{grid-template-columns:1fr}
+  .split,.stages{grid-template-columns:1fr}
+  .tray{max-width:320px}
+  section{padding:44px 0}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  body{transform:none!important}
+}
+</style>
+</head>
+<body>
+
+<div class="tubes"></div>
+
+<div class="wrap">
+
+<header>
+  <div class="tagstrip">
+    <span data-es="Producto Fresco · Cultivado en Solana">Fresh Produce · Grown on Solana</span>
+    <span style="display:flex;gap:14px;align-items:center">
+      <span data-es="Peso neto 1,000,000,000">Net wt. 1,000,000,000</span>
+      <button id="lang">ES</button>
+    </span>
+  </div>
+
+  <div class="hero">
+    <div>
+      <h1 data-es='Brócoli<span class="lg">Súper Legendario</span>'>Broccoli<span class="lg">Legendary Super</span></h1>
+      <p class="sub" data-es="Nadie lo pidió. Todos lo recibimos igual. <em>Odio el brócoli.</em>">Nobody asked for it. Everybody got it anyway. <em>I hate brócoli.</em></p>
+    </div>
+
+    <div class="tray">
+      <div class="photo">
+        <div class="glow"></div>
+        <video id="film" src="broli-hero.mp4" poster="broli.png" muted playsinline
+               preload="auto" disablepictureinpicture
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"></video>
+        <div class="noimg" style="display:none">Add <b>&nbsp;broli-hero.mp4&nbsp;</b> next to this file</div>
+      </div>
+      <div class="plu">$BROLI<br>4060</div>
+      <div class="trayfoot"><span>Class 1</span><span>Keep refrigerated</span></div>
+    </div>
+  </div>
+
+  <!-- SIGNATURE: the produce scale -->
+  <div class="scale">
+    <div class="scale-top">
+      <span class="eyebrow" data-es="Odio, medido">Hatred, measured</span>
+      <span class="readout" id="readout">0</span>
+    </div>
+    <div class="bar"><div class="fill" id="fill"></div></div>
+    <button class="smash" id="smash" data-es="Golpea el brócoli">Hit the broccoli</button>
+  </div>
+
+  <div class="barcode">
+    <div class="ca" id="ca" data-es="La dirección del contrato llega en el lanzamiento">Contract address drops at launch</div>
+    <button class="copy" id="copy" data-es="Copiar">Copy</button>
+  </div>
+</header>
+
+<section>
+  <div class="split">
+    <div>
+      <span class="eyebrow" data-es="Panel 01">Panel 01</span>
+      <h2 data-es="Lee la etiqueta">Read the label</h2>
+      <p data-es="Sin impuestos. Sin bolsa para el equipo. Sin preventa. Es una verdura, no un plan de negocios. La liquidez está quemada y el mint cerrado, que es más de lo que puede decir el brócoli de tu refri.">No tax. No team bag. No presale. It is a vegetable, not a business plan. Liquidity is burned and the mint is gone, which is more than the broccoli in your fridge can say.</p>
+      <p style="margin-top:14px" data-es="Todo lo que necesitas saber cabe en un costado del paquete, como debe ser.">Everything you need to know fits on the side of the package, the way it should.</p>
+    </div>
+
+    <div class="label">
+      <h3>Nutrition Facts</h3>
+      <div class="thin"></div>
+      <div class="row"><span>1 serving per container</span></div>
+      <div class="row"><b>Serving size</b><b>1 bag (1B BROLI)</b></div>
+      <div class="thick"></div>
+      <div class="row"><span style="font-size:11px">Amount per serving</span></div>
+      <div class="row" style="align-items:flex-end"><b style="font-size:26px">Calories</b><b style="font-size:26px">0</b></div>
+      <div class="thick" style="height:5px"></div>
+      <div class="row" style="justify-content:flex-end;font-size:11px"><b>% Daily Rage</b></div>
+      <div class="thin"></div>
+      <div class="row"><span><b>Total Supply</b> 1,000,000,000</span><b>100%</b></div>
+      <div class="row indent"><span>Burned Liquidity</span><b>100%</b></div>
+      <div class="row indent"><span>Team Allocation</span><b>0%</b></div>
+      <div class="thin"></div>
+      <div class="row"><span><b>Buy Tax</b> 0g</span><b>0%</b></div>
+      <div class="row"><span><b>Sell Tax</b> 0g</span><b>0%</b></div>
+      <div class="row"><span><b>Fiber</b></span><b>Way too much</b></div>
+      <div class="row"><span><b>Rage</b> 9,001mg</span><b>∞</b></div>
+      <div class="thick"></div>
+      <div class="fine">% Daily Rage tells you how much one serving contributes to a diet of pure anger. 2,000 calories a day is used for general nutrition advice. This is not nutrition advice. This is not any kind of advice.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <span class="eyebrow" data-es="Panel 02">Panel 02</span>
+  <h2 data-es="Quejas de clientes">Customer complaints</h2>
+  <div class="split">
+    <div class="receipt">
+      <div class="head">★ GREENGROCER ★</div>
+      <div id="quote">It squeaks. Food is not supposed to squeak.</div>
+      <button class="again" id="again" data-es="Imprimir otra">Print another</button>
+    </div>
+    <div>
+      <p data-es="Toda casa tiene una. La bolsa que se va empujando al fondo del cajón hasta que se convierte en un proyecto de ciencias. Esta es esa bolsa, con capitalización de mercado.">Every household has one. The bag that gets pushed to the back of the crisper drawer until it becomes a science project. This is that bag, with a market cap.</p>
+      <p style="margin-top:14px" data-es="Manda la tuya al chat. La mejor se cuelga en el muro de abajo, para siempre.">Send yours to the chat. The best ones go up on the wall below, permanently.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <span class="eyebrow" data-es="Panel 03">Panel 03</span>
+  <h2 data-es="El muro de las quejas">The complaint wall</h2>
+  <p style="max-width:52ch" data-es="Quejas reales de gente real. Una línea cada una. Se actualiza los domingos.">Real grievances from real people. One line each. Updated Sundays.</p>
+  <div class="wall" id="wall"></div>
+  <a class="cta" id="submit" href="#" target="_blank" rel="noopener" style="font-size:20px;padding:16px 30px" data-es="Manda la tuya">Add yours</a>
+</section>
+
+<section>
+  <span class="eyebrow" data-es="Panel 04">Panel 04</span>
+  <h2 data-es="Temporada de cosecha">Growing season</h2>
+  <div class="stages">
+    <div class="stage">
+      <div class="n" data-es="ETAPA 01">STAGE 01</div>
+      <h4 data-es="Semilla">Seedling</h4>
+      <p data-es="Lanzamiento en pump.fun. Doce personas en el chat. Once son bots.">Launch on pump.fun. Twelve people in the chat. Eleven of them are bots.</p>
+    </div>
+    <div class="stage">
+      <div class="n" data-es="ETAPA 02">STAGE 02</div>
+      <h4 data-es="Florete">Floret</h4>
+      <p data-es="La curva se llena. El meme escapa del grupo y llega a las timelines.">Bonding curve fills. The meme escapes the group chat and hits timelines.</p>
+    </div>
+    <div class="stage">
+      <div class="n" data-es="ETAPA 03">STAGE 03</div>
+      <h4 data-es="Cabeza entera">Full head</h4>
+      <p data-es="Raydium. Gráficas. Alguien hace una versión peor y lo tomamos personal.">Raydium. Charts. Somebody makes a worse version and we take that personally.</p>
+    </div>
+    <div class="stage">
+      <div class="n" data-es="ETAPA 04">STAGE 04</div>
+      <h4 data-es="Legendario">Legendary</h4>
+      <p data-es="En cada refri del planeta. Nadie se lo come. El valor nunca fue la verdura.">Every fridge on earth. Nobody eats it. The value was never the vegetable.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <span class="eyebrow" data-es="Panel 05">Panel 05</span>
+  <h2 data-es="Caja">Checkout</h2>
+  <ul class="lane">
+    <li><span class="k">01</span><div><h5 data-es="Consigue una wallet de Solana">Get a Solana wallet</h5><p data-es="Phantom o Solflare. Gratis, dos minutos.">Phantom or Solflare. Free, takes two minutes.</p></div></li>
+    <li><span class="k">02</span><div><h5 data-es="Agrega SOL">Add SOL</h5><p data-es="Compra en un exchange y mándalo a tu wallet.">Buy on an exchange and send it to your wallet address.</p></div></li>
+    <li><span class="k">03</span><div><h5 data-es="Cámbialo por BROLI">Swap for BROLI</h5><p data-es="Abre la página de pump.fun, pega el contrato, compra.">Open the pump.fun page, paste the contract address, buy.</p></div></li>
+    <li><span class="k">04</span><div><h5 data-es="Niégate a comer verduras">Refuse to eat your vegetables</h5><p data-es="Te lo ganaste.">You have earned this.</p></div></li>
+  </ul>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+    <a class="cta" href="#" id="buy" target="_blank" rel="noopener" data-es="Comprar en pump.fun">Buy on pump.fun</a>
+    <a class="cta" href="quiz.html" style="background:var(--stem);font-size:20px;padding:16px 30px" data-es="¿Cuánto odias el brócoli?">How much do you hate broccoli?</a>
+  </div>
+</section>
+
+<footer>
+  <span>$BROLI · Solana</span>
+  <span><a href="#" id="x" target="_blank" rel="noopener">X</a> · <a href="#" id="tg" target="_blank" rel="noopener">Telegram</a> · <a href="quiz.html" data-es="Cuestionario">Quiz</a></span>
+  <span data-es="Un meme. Cero utilidad. Cero promesas.">A meme. Zero utility. Zero promises.</span>
+</footer>
+
+</div>
+
+<script>
+/* ═══════════ CONFIG — EDIT THIS ═══════════ */
+const CONFIG = {
+  contract: "",                     // paste contract address after launch
+  pumpUrl:  "https://pump.fun",     // paste your coin's pump.fun link
+  twitter:  "https://x.com/",       // your X profile
+  telegram: "https://t.me/"         // your chat (delete this line if unused)
+};
+/* ═════════════════════════════════════════ */
+
+if (CONFIG.contract) document.getElementById('ca').textContent = CONFIG.contract;
+document.getElementById('buy').href = CONFIG.pumpUrl;
+document.getElementById('x').href   = CONFIG.twitter;
+document.getElementById('tg').href  = CONFIG.telegram;
+
+document.getElementById('copy').addEventListener('click', e => {
+  const val = CONFIG.contract || 'Not live yet';
+  navigator.clipboard?.writeText(val);
+  e.target.textContent = 'Copied';
+  setTimeout(() => e.target.textContent = 'Copy', 1400);
+});
+
+/* ── the scale ── */
+const MAX = 9001;
+let rage = 0, legend = false;
+const readout = document.getElementById('readout'),
+      fill = document.getElementById('fill'),
+      smash = document.getElementById('smash'),
+      body = document.body;
+
+/* the video is the transformation — each hit scrubs it forward */
+const film = document.getElementById('film');
+let ready = false, target = 0, at = 0, unlocked = false;
+film?.addEventListener('loadedmetadata', () => { ready = true; film.currentTime = 0; });
+
+(function tick(){
+  if (ready && !legend) {
+    at += (target - at) * 0.10;
+    const t = Math.min(film.duration - 0.06, at * film.duration);
+    if (Math.abs(film.currentTime - t) > 0.02) film.currentTime = t;
+  }
+  requestAnimationFrame(tick);
+})();
+
+smash.addEventListener('click', () => {
+  if (!unlocked && film) { film.play().then(() => film.pause()).catch(()=>{}); unlocked = true; }
+  rage = Math.min(MAX, rage + Math.floor(280 + Math.random() * 620));
+  target = rage / MAX;
+  readout.textContent = rage.toLocaleString();
+  fill.style.width = (rage / MAX * 100) + '%';
+  shake(rage / MAX);
+  flicker();
+  if (rage >= MAX && !legend) {
+    legend = true;
+    body.classList.add('legendary');
+    smash.textContent = 'Full power';
+    readout.textContent = 'OVER 9000';
+    if (film) { film.currentTime = at * film.duration; film.play().catch(()=>{}); }
+  } else if (!legend) {
+    smash.textContent = ['Hit it again','Harder','It can take it','Do not stop'][Math.floor(Math.random()*4)];
+  }
+});
+
+function shake(intensity){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let n = 0;
+  const t = setInterval(() => {
+    const amt = (4 + intensity * 10) * (n % 2 ? -1 : 1);
+    body.style.setProperty('--shake', amt + 'px');
+    if (++n > 5) { clearInterval(t); body.style.setProperty('--shake','0px'); }
+  }, 26);
+}
+function flicker(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const r = document.documentElement;
+  [0.4,1,0.6,1].forEach((v,i) => setTimeout(() => r.style.setProperty('--flicker',v), i*55));
+}
+
+/* ── complaints ── */
+const COMPLAINTS = [
+  "It squeaks. Food is not supposed to squeak.",
+  "It is a tiny tree and I am not a giraffe.",
+  "¿Otra vez brócoli? En serio.",
+  "The cheese sauce is doing one hundred percent of the work.",
+  "Steamed, boiled, roasted, air fried. Still bad.",
+  "Found one under the couch. Dated it. 2019.",
+  "Mom said one more bite. That was in March.",
+  "I ate my greens and I am somehow angrier.",
+  "Smells like a gym sock's funeral in here.",
+  "Nobody in recorded history has finished the broccoli.",
+  "My dog turned it down and he eats drywall.",
+  "It is the only vegetable that fights back."
+];
+let last = 0;
+const q = document.getElementById('quote');
+document.getElementById('again').addEventListener('click', () => {
+  let i; do { i = Math.floor(Math.random() * COMPLAINTS.length); } while (i === last);
+  last = i;
+  q.style.opacity = 0;
+  setTimeout(() => { q.textContent = COMPLAINTS[i]; q.style.opacity = 1; }, 130);
+});
+q.style.transition = 'opacity .13s';
+
+/* ── COMPLAINT WALL — add winners here every Sunday ── */
+const WALL = [
+  ["It squeaks. Food is not supposed to squeak.", "@handle"],
+  ["Mi mamá me dijo 'te lo comes o te lo comes'. No había opción B.", "@handle"],
+  ["Found one under the couch. Dated it. 2019.", "@handle"],
+  ["My dog turned it down and he eats drywall.", "@handle"],
+  ["It's a tiny tree and I am not a giraffe.", "@handle"],
+  ["The cheese sauce is doing 100% of the work.", "@handle"]
+];
+document.getElementById('wall').innerHTML = WALL.map(([t,w]) =>
+  `<div class="card"><p>${t}</p><div class="who">${w}</div></div>`).join('');
+document.getElementById('submit').href = CONFIG.telegram;
+
+/* ── language toggle ── */
+const lang = document.getElementById('lang');
+let es = false;
+lang.addEventListener('click', () => {
+  es = !es;
+  document.querySelectorAll('[data-es]').forEach(el => {
+    const now = el.innerHTML;
+    el.innerHTML = el.dataset.es;
+    el.dataset.es = now;
+  });
+  lang.textContent = es ? 'EN' : 'ES';
+  document.documentElement.lang = es ? 'es' : 'en';
+});
+</script>
+</body>
+</html>
