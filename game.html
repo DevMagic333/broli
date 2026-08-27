@@ -86,7 +86,9 @@ input{font-family:'Space Mono',monospace;font-size:15px;padding:13px;border:2px 
         PURPLE<br><b style="font-size:14px">SWIPE</b></div>
     </div>
     <p class="lead">Punch the green ones. Swipe anywhere to dodge the rotten purple ones.
-      <b>Anything that reaches you is a strike. Three and you're done.</b></p>
+      <b>Anything that reaches you is a strike. Three and you're done.</b>
+      <span style="display:block;margin-top:9px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.08em;opacity:.65">
+        On a computer: click to punch, SPACE to dodge</span></p>
     <button id="go">Start</button>
     <div class="acts">
       <button class="ghost" id="see">Leaderboard</button>
@@ -417,6 +419,15 @@ cv.addEventListener("pointerup", e => {
   else tap(dx0, dy0);
 });
 cv.addEventListener("pointercancel", () => {});
+
+/* desktop: space or arrows to dodge, since you can't swipe with a mouse */
+addEventListener("keydown", e => {
+  if ([" ", "Spacebar", "ArrowLeft", "ArrowRight", "ArrowDown", "s", "S"].includes(e.key)){
+    e.preventDefault();
+    if (running) dodge();
+    else if (!$("p-start").classList.contains("hide")) start();
+  }
+});
 
 /* ── flow ── */
 let token = null, hits = 0, startedAt = 0;
