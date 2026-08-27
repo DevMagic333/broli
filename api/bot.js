@@ -5,7 +5,7 @@
 const CONFIG = {
   contract: "",                        // paste contract address after launch
   pumpUrl:  "https://pump.fun",        // your coin's pump.fun page
-  site:     "https://broli-ten.vercel.app",
+  site: "https://ihatebroccoli.fun",
   twitter:  "https://x.com/Broli_sol",
   autoJabChance: 0.15                  // odds the bot butts in when someone says broccoli
 };
