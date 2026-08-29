@@ -6,13 +6,6 @@
 <title>BROCCOLI — $BROLI</title>
 <meta name="description" content="A vegetable nobody asked for. Now on Solana.">
 
-<!-- ═══════════════════════════════════════════════════════════
-     EDIT THESE THREE THINGS AND YOU'RE DONE
-     1. Put your image in the same folder, named  broli.png
-     2. Fill in CONFIG below (contract address + links)
-     3. Upload to GitHub → Vercel does the rest
-     ═══════════════════════════════════════════════════════ -->
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter+Tight:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -390,14 +383,18 @@ footer a{color:inherit}
 <script>
 /* ═══════════ CONFIG — EDIT THIS ═══════════ */
 const CONFIG = {
-  contract: "",                     // paste contract address after launch
-  pumpUrl:  "https://pump.fun",     // paste your coin's pump.fun link
+  contract: "C9eAZmNDiAokkVoai7diynWtME6UpZfgVuCrX4ripump",
+  pumpUrl:  "https://pump.fun/coin/C9eAZmNDiAokkVoai7diynWtME6UpZfgVuCrX4ripump",
   twitter:  "https://x.com/Broli_sol",
   telegram: "https://t.me/+iKSdMxcRr8s3MzZh"
 };
 /* ═════════════════════════════════════════ */
 
-if (CONFIG.contract) document.getElementById('ca').textContent = CONFIG.contract;
+if (CONFIG.contract) {
+  const caEl = document.getElementById('ca');
+  caEl.textContent = CONFIG.contract;
+  caEl.dataset.es  = CONFIG.contract;   /* keep the CA visible after the ES toggle */
+}
 document.getElementById('buy').href = CONFIG.pumpUrl;
 document.getElementById('x').href   = CONFIG.twitter;
 document.getElementById('tg').href  = CONFIG.telegram;
