@@ -84,7 +84,8 @@ h1 .lg{display:block;font-size:.42em;color:var(--sticker);letter-spacing:0;
   opacity:0;max-height:0;overflow:hidden;transition:opacity .5s,max-height .5s}
 body.legendary h1 .lg{opacity:1;max-height:90px}
 .sub{font-size:19px;font-weight:600;margin-top:16px;max-width:34ch}
-.sub em{font-style:italic;color:var(--floret)}
+/* block, so the punchline never gets split across a line break */
+.sub em{font-style:italic;color:var(--floret);display:block;margin-top:2px}
 
 /* product photo in a styrofoam tray */
 .tray{
@@ -123,10 +124,16 @@ body.legendary .plu{color:#14260E}
 .fill{position:absolute;inset:0 auto 0 0;width:0;background:var(--floret);
   transition:width .18s cubic-bezier(.2,.9,.3,1);mix-blend-mode:multiply}
 body.legendary .fill{mix-blend-mode:normal;background:var(--high)}
+/* touch-action:manipulation kills iOS double-tap-to-zoom. Without it, fast
+   repeated taps on the smash button read as a zoom gesture and the page
+   jumps out from under you mid-transformation. */
+button,a,.cta{touch-action:manipulation}
 .smash{
   width:100%;padding:20px;border:0;background:var(--sticker);color:#fff;cursor:pointer;
   font-family:'Anton',sans-serif;font-size:clamp(20px,5vw,28px);text-transform:uppercase;
   letter-spacing:.04em;transition:filter .1s;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  -webkit-user-select:none;user-select:none;
 }
 body.legendary .smash{color:#14260E}
 .smash:hover{filter:brightness(1.1)}
@@ -154,6 +161,22 @@ body.legendary .smash{color:#14260E}
 .row b{font-weight:800}
 .row.indent{padding-left:16px}
 .fine{font-size:11px;line-height:1.35;margin-top:8px}
+.fine .addr{font-family:'Space Mono',monospace;font-size:10px;word-break:break-all;
+  -webkit-user-select:all;user-select:all}
+
+/* ── STICKER SHEET (the insert inside the packaging) ── */
+.sheet{border:2px dashed var(--line);background:var(--tray);padding:16px}
+.sheet-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+  flex-wrap:wrap;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;margin-bottom:14px}
+.sheet-top a{color:var(--floret)}
+.peel{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.peel figure{background:var(--paper);border:2px solid var(--line);border-radius:12px;
+  padding:8px 6px 6px;text-align:center}
+.peel img{width:100%;height:auto;aspect-ratio:1;object-fit:contain;display:block}
+.peel figcaption{font-family:'Space Mono',monospace;font-size:9px;line-height:1.3;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--floret);margin-top:5px}
+@media(max-width:760px){.peel{grid-template-columns:repeat(3,1fr);gap:8px}}
 
 /* ── RECEIPT ───────────────────────────────────── */
 .receipt{background:var(--tray);border:2px solid var(--line);padding:22px 20px 26px;
@@ -291,8 +314,7 @@ footer a{color:inherit}
       <div class="row" style="justify-content:flex-end;font-size:11px"><b>% Daily Rage</b></div>
       <div class="thin"></div>
       <div class="row"><span><b>Total Supply</b> 1,000,000,000</span><b>100%</b></div>
-      <div class="row indent"><span>Prize Wallet</span><b>0.0%</b></div>
-      <div class="row indent"><span>Sold by Creator</span><b>0%</b></div>
+      <div class="row indent"><span>Prize Wallet</span><b>1.6%</b></div>
       <div class="thin"></div>
       <div class="row"><span><b>Buy Tax</b> 0g</span><b>0%</b></div>
       <div class="row"><span><b>Sell Tax</b> 0g</span><b>0%</b></div>
@@ -300,7 +322,24 @@ footer a{color:inherit}
       <div class="row"><span><b>Fiber</b></span><b>Way too much</b></div>
       <div class="row"><span><b>Rage</b> 9,001mg</span><b>∞</b></div>
       <div class="thick"></div>
-      <div class="fine">The creator's buy at launch is the prize wallet. It pays out contest winners and nothing else. Address is public, every payout has a receipt. Liquidity burns automatically on graduation.<br><br>% Daily Rage tells you how much one serving contributes to a diet of pure anger. 2,000 calories a day is used for general nutrition advice. This is not nutrition advice. This is not any kind of advice.</div>
+      <div class="fine">The creator's buy at launch is 1.6% of supply and it is the prize wallet. That 1.6% <b>is</b> the prize pool — it pays contest winners directly and is not sold on the market. Prizes scale with whatever the pool is worth. Every payout has a receipt. Liquidity burns automatically on graduation.<br><br><b>Prize wallet</b><br><span class="addr">CiDmewWFfa6hsZxXz4zLJ7yBCpiUQE4oeo6po24LB4pq</span><br>Check it against the pinned message in the group. If the two ever disagree, trust this page and say something.<br><br>% Daily Rage tells you how much one serving contributes to a diet of pure anger. 2,000 calories a day is used for general nutrition advice. This is not nutrition advice. This is not any kind of advice.</div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="sheet">
+    <div class="sheet-top">
+      <span data-es="Incluido — hoja de calcomanías">Enclosed — sticker sheet</span>
+      <span><a id="stickers" href="#" target="_blank" rel="noopener" data-es="Úsalas en el grupo">Use them in the group</a></span>
+    </div>
+    <div class="peel">
+      <figure><img src="broli-angry.webp" alt="Broli, furious" loading="lazy" width="512" height="512"><figcaption data-es="Lo vio">Sees it</figcaption></figure>
+      <figure><img src="broli-shocked.webp" alt="Broli, shocked" loading="lazy" width="512" height="512"><figcaption data-es="Rechinó">It squeaked</figcaption></figure>
+      <figure><img src="broli-crying.webp" alt="Broli, crying" loading="lazy" width="512" height="512"><figcaption data-es="Una mordida más">One more bite</figcaption></figure>
+      <figure><img src="broli-bored.webp" alt="Broli, unimpressed" loading="lazy" width="512" height="512"><figcaption data-es="Sigue ahí">Still there</figcaption></figure>
+      <figure><img src="broli-smug.webp" alt="Broli, smug" loading="lazy" width="512" height="512"><figcaption data-es="Lo tiró">Threw it out</figcaption></figure>
+      <figure><img src="broli-asleep.webp" alt="Broli, asleep" loading="lazy" width="512" height="512"><figcaption data-es="Después de cenar">Post-dinner</figcaption></figure>
     </div>
   </div>
 </section>
@@ -441,7 +480,18 @@ smash.addEventListener('click', () => {
     body.classList.add('legendary');
     smash.textContent = 'Full power';
     readout.textContent = 'OVER 9000';
-    if (film) { film.currentTime = at * film.duration; film.play().catch(()=>{}); }
+    /* if the mp4 never loaded, duration is NaN and setting currentTime throws —
+       which would kill everything after it in this block */
+    if (film && isFinite(film.duration)) {
+      film.currentTime = at * film.duration;
+      film.play().catch(()=>{});
+    }
+    /* on a phone the tray sits above the button and can be off-screen at the
+       moment it matters — pull it into view for the payoff */
+    document.querySelector('.tray')?.scrollIntoView({
+      behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      block: 'center'
+    });
   } else if (!legend) {
     smash.textContent = ['Hit it again','Harder','It can take it','Do not stop'][Math.floor(Math.random()*4)];
   }
@@ -489,6 +539,8 @@ q.style.transition = 'opacity .13s';
 
 /* ── COMPLAINT WALL — add winners here every Sunday ── */
 const WALL = [
+  ["Broccoli really got me questioning every life decision I've ever made.", "@Henrywalker011"],
+  ["Cold, plain and no salt. Tasted like disappointment.", "@stephhaj"],
   ["It squeaks. Food is not supposed to squeak.", "@handle"],
   ["Mi mamá me dijo 'te lo comes o te lo comes'. No había opción B.", "@handle"],
   ["Found one under the couch. Dated it. 2019.", "@handle"],
@@ -498,7 +550,8 @@ const WALL = [
 ];
 document.getElementById('wall').innerHTML = WALL.map(([t,w]) =>
   `<div class="card"><p>${t}</p><div class="who">${w}</div></div>`).join('');
-document.getElementById('submit').href = CONFIG.telegram;
+document.getElementById('submit').href   = CONFIG.telegram;
+document.getElementById('stickers').href = CONFIG.telegram;
 
 /* ── language toggle ── */
 const lang = document.getElementById('lang');
