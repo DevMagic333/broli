@@ -63,6 +63,15 @@ const money = n => n >= 1e6 ? "$" + (n / 1e6).toFixed(2) + "M"
               : n >= 1e3 ? "$" + (n / 1e3).toFixed(1) + "K"
               : "$" + Number(n).toFixed(2);
 
+/* Escape anything user-controlled before it goes into an HTML message.
+   Telegram display names can contain <, > and &. Unescaped, they either
+   break the send (silent 400) or let someone inject a link into the bot's
+   own messages — including the scam-removal notice. */
+const esc = s => String(s ?? "")
+  .replace(/&/g, "&amp;")
+  .replace(/</g, "&lt;")
+  .replace(/>/g, "&gt;");
+
 async function tg(method, body) {
   const r = await fetch(`https://api.telegram.org/bot${TOKEN}/${method}`, {
     method: "POST",
@@ -79,7 +88,9 @@ async function isAdmin(chat_id, user_id){
   } catch { return false; }
 }
 
-const who = u => u ? `${u.first_name || ""}${u.username ? " (@" + u.username + ")" : ""}`.trim() : "them";
+const who = u => u
+  ? `${esc(u.first_name || "")}${u.username ? " (@" + esc(u.username) + ")" : ""}`.trim() || "them"
+  : "them";
 
 /* ═══════════ TEAMS — the broccoli war ═══════════ */
 const SB_URL = process.env.SUPABASE_URL;
@@ -236,7 +247,10 @@ export default async function handler(req, res) {
     return res.status(401).send("no");
 
   try {
-    const msg = req.body?.message;
+    /* edited messages get scanned for scams too — otherwise a clean message
+       can be edited into a scam after the fact and never re-checked */
+    const isEdit = !req.body?.message && !!req.body?.edited_message;
+    const msg = req.body?.message || req.body?.edited_message;
     if (!msg) return res.status(200).send("ok");
     const chat = msg.chat.id, id = msg.message_id;
     const text = (msg.text || msg.caption || "").toLowerCase();
@@ -247,6 +261,8 @@ export default async function handler(req, res) {
       return res.status(200).send("ok");
     }
 
+    if (!from) return res.status(200).send("ok"); // channel / anonymous sender
+
     /* auto-remove obvious scams from non-admins */
     if (text && looksLikeScam(text) && !(await isAdmin(chat, from.id))) {
       await tg("deleteMessage", { chat_id: chat, message_id: id });
@@ -254,6 +270,9 @@ export default async function handler(req, res) {
                       `Reminder: admins never DM you first, and nobody here will ever ask for a seed phrase.`);
       return res.status(200).send("ok");
     }
+
+    /* past this point it's command handling — edits shouldn't re-fire commands */
+    if (isEdit) return res.status(200).send("ok");
 
     const cmd = text.split(/[\s@]/)[0];
     const target = msg.reply_to_message;
@@ -275,7 +294,7 @@ export default async function handler(req, res) {
         const link = (msg.text || "").split(/\s+/).slice(1).join(" ").trim();
         if (!link) { await say(chat, "Usage: /signal &lt;link to the post&gt;", id); return res.status(200).send("ok"); }
         await say(chat,
-          `New post is up.\n\n${link}\n\n` +
+          `New post is up.\n\n${esc(link)}\n\n` +
           `If you feel like it: <b>${pick(ANGLES)}</b>.\n\n` +
           `Say your own thing. Copy-paste replies get everyone flagged and help nobody.`);
         return res.status(200).send("ok");
@@ -283,6 +302,7 @@ export default async function handler(req, res) {
 
       if (!target) { await say(chat, "Reply to the message you mean.", id); return res.status(200).send("ok"); }
       const u = target.from;
+      if (!u) { await say(chat, "Can't act on that one — no sender.", id); return res.status(200).send("ok"); }
 
       if (cmd === "/del") {
         await tg("deleteMessage", { chat_id: chat, message_id: target.message_id });
