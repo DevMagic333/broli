@@ -164,6 +164,13 @@ body.legendary .smash{color:#14260E}
 .fine .addr{font-family:'Space Mono',monospace;font-size:10px;word-break:break-all;
   -webkit-user-select:all;user-select:all}
 
+/* fills the gap the tall nutrition label leaves in the left column */
+.inspector{margin-top:30px;max-width:250px}
+.inspector img{width:100%;height:auto;aspect-ratio:1;object-fit:contain;display:block}
+.inspector figcaption{font-family:'Space Mono',monospace;font-size:10px;line-height:1.5;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--floret);margin-top:8px}
+@media(max-width:760px){.inspector{margin:24px auto 0}}
+
 /* ── STICKER SHEET (the insert inside the packaging) ── */
 .sheet{border:2px dashed var(--line);background:var(--tray);padding:16px}
 .sheet-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
@@ -300,6 +307,10 @@ footer a{color:inherit}
       <h2 data-es="Lee la etiqueta">Read the label</h2>
       <p data-es="Sin impuestos. Sin preventa. Es una verdura, no un plan de negocios. La compra inicial de la creadora es la bolsa de premios — la dirección es pública y cada pago tiene comprobante.">No tax. No presale. It is a vegetable, not a business plan. The creator's buy at launch is the prize wallet — public address, receipts for every payout, nothing else comes out of it.</p>
       <p style="margin-top:14px" data-es="Todo lo que necesitas saber cabe en un costado del paquete, como debe ser.">Everything you need to know fits on the side of the package, the way it should.</p>
+      <figure class="inspector">
+        <img src="broli-bored.webp" alt="Broli, unimpressed" loading="lazy" width="512" height="512">
+        <figcaption data-es="Inspeccionado por él. No disfrutó nada de esto.">Inspected by him. He did not enjoy any of it.</figcaption>
+      </figure>
     </div>
 
     <div class="label">
@@ -327,23 +338,6 @@ footer a{color:inherit}
   </div>
 </section>
 
-<section style="padding-top:0">
-  <div class="sheet">
-    <div class="sheet-top">
-      <span data-es="Incluido — hoja de calcomanías">Enclosed — sticker sheet</span>
-      <span><a id="stickers" href="#" target="_blank" rel="noopener" data-es="Úsalas en el grupo">Use them in the group</a></span>
-    </div>
-    <div class="peel">
-      <figure><img src="broli-angry.webp" alt="Broli, furious" loading="lazy" width="512" height="512"><figcaption data-es="Lo vio">Sees it</figcaption></figure>
-      <figure><img src="broli-shocked.webp" alt="Broli, shocked" loading="lazy" width="512" height="512"><figcaption data-es="Rechinó">It squeaked</figcaption></figure>
-      <figure><img src="broli-crying.webp" alt="Broli, crying" loading="lazy" width="512" height="512"><figcaption data-es="Una mordida más">One more bite</figcaption></figure>
-      <figure><img src="broli-bored.webp" alt="Broli, unimpressed" loading="lazy" width="512" height="512"><figcaption data-es="Sigue ahí">Still there</figcaption></figure>
-      <figure><img src="broli-smug.webp" alt="Broli, smug" loading="lazy" width="512" height="512"><figcaption data-es="Lo tiró">Threw it out</figcaption></figure>
-      <figure><img src="broli-asleep.webp" alt="Broli, asleep" loading="lazy" width="512" height="512"><figcaption data-es="Después de cenar">Post-dinner</figcaption></figure>
-    </div>
-  </div>
-</section>
-
 <section>
   <span class="eyebrow" data-es="Panel 02">Panel 02</span>
   <h2 data-es="Quejas de clientes">Customer complaints</h2>
@@ -366,6 +360,23 @@ footer a{color:inherit}
   <p style="max-width:52ch" data-es="Quejas reales de gente real. Una línea cada una. Se actualiza los domingos.">Real grievances from real people. One line each. Updated Sundays.</p>
   <div class="wall" id="wall"></div>
   <a class="cta" id="submit" href="#" target="_blank" rel="noopener" style="font-size:20px;padding:16px 30px" data-es="Manda la tuya">Add yours</a>
+</section>
+
+<section style="padding-top:0">
+  <div class="sheet">
+    <div class="sheet-top">
+      <span data-es="Incluido — hoja de calcomanías">Enclosed — sticker sheet</span>
+      <span><a id="stickers" href="#" target="_blank" rel="noopener" data-es="Úsalas en el grupo">Use them in the group</a></span>
+    </div>
+    <div class="peel">
+      <figure><img src="broli-angry.webp" alt="Broli, furious" loading="lazy" width="512" height="512"><figcaption data-es="Lo vio">Sees it</figcaption></figure>
+      <figure><img src="broli-shocked.webp" alt="Broli, shocked" loading="lazy" width="512" height="512"><figcaption data-es="Rechinó">It squeaked</figcaption></figure>
+      <figure><img src="broli-crying.webp" alt="Broli, crying" loading="lazy" width="512" height="512"><figcaption data-es="Una mordida más">One more bite</figcaption></figure>
+      <figure><img src="broli-bored.webp" alt="Broli, unimpressed" loading="lazy" width="512" height="512"><figcaption data-es="Sigue ahí">Still there</figcaption></figure>
+      <figure><img src="broli-smug.webp" alt="Broli, smug" loading="lazy" width="512" height="512"><figcaption data-es="Lo tiró">Threw it out</figcaption></figure>
+      <figure><img src="broli-asleep.webp" alt="Broli, asleep" loading="lazy" width="512" height="512"><figcaption data-es="Después de cenar">Post-dinner</figcaption></figure>
+    </div>
+  </div>
 </section>
 
 <section>
